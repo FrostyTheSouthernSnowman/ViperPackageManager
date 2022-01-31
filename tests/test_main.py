@@ -1,6 +1,6 @@
 from typer.testing import CliRunner
 
-from VPM.main import app
+from VPM.__main__ import app
 
 runner = CliRunner()
 

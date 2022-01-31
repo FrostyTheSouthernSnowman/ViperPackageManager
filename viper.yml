@@ -1,0 +1,5 @@
+scripts:
+    - echo "no scripts set in viper.yml
+
+requirement:
+    - pip
