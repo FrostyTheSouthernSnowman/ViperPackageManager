@@ -2,7 +2,7 @@ import typer
 import halo
 from halo import Halo
 import os
-from src.initialize import initialize_proj
+from subprocess import PIPE, Popen
 
 
 app = typer.Typer()
@@ -13,7 +13,9 @@ def install(package: str):
     typer.echo(f"Installing {package}.")
     spinner = halo.Halo(text=f'Upgrading pip.', spinner='dots')
     spinner.start()
-    stream = os.popen("python -m pip install --upgrade pip")
+    pipe = Popen("python -m pip install --upgrade pip",
+                 shell=True, stdout=PIPE, stderr=PIPE)
+    stream, stream_err = pipe.communicate()
     spinner.stop()
     spinner = halo.Halo(
         text=f"Installing {package} with pip.", spinner="bouncingBall")
@@ -22,7 +24,7 @@ def install(package: str):
     output = stream.read()
     stream.close()
     spinner.stop()
-    print("\n")
+    typer.echo("\n")
     typer.echo(output)
 
     typer.echo(f"package {package} installed successfully")
@@ -33,10 +35,11 @@ def run(command: str):
     typer.echo(f"Now running {command}.")
 
 
-@app.command()
-def init():
-    initialize_proj()
-
-
 if __name__ == "__main__":  # pragma: no cover
+    from src.initialize import initialize_proj
+
+    @app.command()
+    def init():
+        initialize_proj()
+
     app()
