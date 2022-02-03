@@ -35,11 +35,16 @@ def run(command: str):
     typer.echo(f"Now running {command}.")
 
 
-if __name__ == "__main__":  # pragma: no cover
-    from src.initialize import initialize_proj
+@app.command()
+def init():
+    with open("viper.yml", "w+") as f:
+        f.write("""scripts:
+    - echo \"no scripts set in viper.yml\n
+requirement:
+    - pip""")
+    typer.echo("Initialized viper project in current directory.")
 
-    @app.command()
-    def init():
-        initialize_proj()
+
+if __name__ == "__main__":  # pragma: no cover
 
     app()
